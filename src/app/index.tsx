@@ -1,20 +1,16 @@
 import { Router } from '@solidjs/router';
-import axios from 'axios';
 import type { Component } from 'solid-js';
+import { CreateHttpClient } from '../api/http/create-client';
 import { HttpWeatherApi } from '../api/http/weather';
+import { Footer } from '../components/footer';
+import { Config } from '../config';
 import { Routing } from '../pages';
 import { ApiContext, Api } from '../providers/api';
 
 const App: Component = () => {
-  const weatherClient = axios.create({
-    baseURL: '',
-    headers: {
-      'Content-type': 'application/json',
-    },
-  });
-
+  const weatherClient = CreateHttpClient(Config.WeatherApiRoute);
   const api: Api = {
-    weather: new HttpWeatherApi(weatherClient),
+    weather: new HttpWeatherApi(weatherClient, Config.WeatherApiKey),
   };
 
   return (
@@ -22,6 +18,7 @@ const App: Component = () => {
       <Router>
         <Routing />
       </Router>
+      <Footer />
     </ApiContext.Provider>
   );
 };
